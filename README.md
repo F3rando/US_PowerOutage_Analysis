@@ -10,19 +10,19 @@ This project investigates a dataset of major power outages in the United States,
 
 > **What factors—specifically related to geography, climate, and population density—are the most significant predictors of power outage duration?**
 
-## The Dataset
+### The Dataset
 
 The data utilized in this analysis contains 1,534 rows, each representing a major power outage in the U.S. occurring between 2000 and 2016. By analyzing these records, I aim to identify patterns in how different regions respond to and recover from grid failures.
 
-## Relevant Columns
+### Relevant Columns
 
 To answer my research question and build a predictive model, I focused on the following key features:
 
-- `**OUTAGE.DURATION` (Minutes)**: My target variable, the total time from the start of the outage until power was fully restored.
-- `**CLIMATE.REGION`**: The geographical area where the outage occurred (e.g., Northeast, Central).
-- `**CAUSE.CATEGORY`**: The primary reason for the outage (e.g., Severe Weather, Equipment Failure).
-- `**ANOMALY.LEVEL`**: A quantitative measure of climate anomalies (like El Niño/La Niña) present during the outage.
-- `**POPDEN_URBAN**`: The population density of urban areas in the affected state, which serves as a proxy for infrastructure complexity and repair priority.
+* **OUTAGE.DURATION (Minutes)**: My target variable, the total time from the start of the outage until power was fully restored.
+* **CLIMATE.REGION**: The geographical area where the outage occurred (e.g., Northeast, Central).
+* **CAUSE.CATEGORY**: The primary reason for the outage (e.g., Severe Weather, Equipment Failure).
+* **ANOMALY.LEVEL**: A quantitative measure of climate anomalies (like El Niño/La Niña) present during the outage.
+* **POPDEN_URBAN**: The population density of urban areas in the affected state, which serves as a proxy for infrastructure complexity and repair priority.
 
 ## Data Cleaning and Exploratory Data Analysis
 
@@ -40,13 +40,13 @@ The table below shows a sample of the cleaned dataset used for modeling:
 > The cleaned sample illustrates how temporal, climatic, and demographic variables come together in a structured format suitable for exploratory analysis and prediction.
 
 
-| YEARMONTH | CLIMATE.REGION     | CAUSE.CATEGORY     | OUTAGE.DURATION | POPDEN_URBAN |
-| --------- | ------------------ | ------------------ | --------------- | ------------ |
-| 20117     | East North Central | severe weather     | 3060            | 2279         |
-| 20145     | East North Central | intentional attack | 1               | 2279         |
-| 201010    | East North Central | severe weather     | 3000            | 2279         |
-| 20126     | East North Central | severe weather     | 2550            | 2279         |
-| 20157     | East North Central | severe weather     | 1740            | 2279         |
+| YEAR | MONTH | CLIMATE.REGION     | CAUSE.CATEGORY     | OUTAGE.DURATION | POPDEN_URBAN | ANOMALY.LEVEL |
+| ---- | ----- | ------------------ | ------------------ | -------------- | ------------ | ------------ |
+| 2011 | 7     | East North Central | severe weather     | 3060           | 2279         | -0.3         |
+| 2014 | 5     | East North Central | intentional attack | 1              | 2279         | -0.1         |
+| 2010 | 10    | East North Central | severe weather     | 3000           | 2279         | -1.5         |
+| 2012 | 6     | East North Central | severe weather     | 2550           | 2279         | -0.1         |
+| 2015 | 7     | East North Central | severe weather     | 1740           | 2279         | 1.2          |
 
 
 ### Univariate Analysis
@@ -108,8 +108,8 @@ To further explore the factors influencing power outage recovery, I conducted a 
 
 ### Hypothesis Setup
 
-- **Null Hypothesis (\(H_0\))**: The mean power outage duration in the Northeast region is equal to the mean power outage duration in the West region. Any observed difference is due to random chance.
-- **Alternative Hypothesis (\(H_1\))**: The mean power outage duration in the Northeast region differs from the mean power outage duration in the West region.
+- **Null Hypothesis (H0)**: The mean power outage duration in the Northeast region is equal to the mean power outage duration in the West region. Any observed difference is due to random chance.
+- **Alternative Hypothesis (H1)**: The mean power outage duration in the Northeast region differs from the mean power outage duration in the West region.
 - **Test Statistic**: Absolute difference in means.
 - **Significance Level (\(\alpha\))**: 0.05.
 
@@ -223,9 +223,9 @@ Group Y (Rural): States with a population density at or below the median.
 
 ### Hypothesis Setup
 
-Null Hypothesis (\(H_0\)): The model is fair. Its RMSE for urban and rural states is roughly the same, and any observed differences are due to random chance.
+**Null Hypothesis (H0)**: The model is fair. Its RMSE for urban and rural states is roughly the same, and any observed differences are due to random chance.
 
-Alternative Hypothesis (\(H_1\)): The model is unfair. Its RMSE for rural states is significantly different from its RMSE for urban states.
+**Alternative Hypothesis (H1)**: The model is unfair. Its RMSE for rural states is significantly different from its RMSE for urban states.
 
 Evaluation Metric: Root Mean Squared Error (RMSE).
 
