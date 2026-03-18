@@ -51,17 +51,23 @@ The table below shows a sample of the cleaned dataset used for modeling:
 
 
 
-> By comparing climate region against outage duration, we can see how geographical context influences restoration speed. Regions such as the Northeast exhibit a higher frequency of long duration outages, likely linked to the intensity and type of local weather events.
 
 ### Univariate Analysis
 
 The univariate analysis focuses on understanding the marginal distribution of outage durations and other key variables before introducing more complex relationships.
 
 
+<iframe src="assets/my_plot_Distribution of Outage Durations.html" width="100%" height="450" frameborder="0"></iframe>
 
 > This histogram displays the distribution of outage durations, revealing a heavily right skewed pattern: most outages are resolved relatively quickly, but a small number of extreme events last for several days and exert a disproportionate influence on the mean.
 
 ### Bivariate Analysis and Interesting Aggregates
+
+For the bivariate analysis, I examined the relationship between geographical regions and the duration of outages to identify spatial patterns in grid resilience.
+
+<iframe src="assets/my_plot_Distribution of Outage Durations by Climate Region.html" width="100%" height="450" frameborder="0"></iframe>
+
+> By comparing climate region against outage duration, we can see how geographical context influences restoration speed. Regions such as the Northeast exhibit a higher frequency of long duration outages, likely linked to the intensity and type of local weather events.
 
 To further explore how climate, cause, and population density interact, I constructed aggregate tables summarizing average outage durations.
 
