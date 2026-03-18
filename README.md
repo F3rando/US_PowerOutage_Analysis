@@ -20,8 +20,8 @@ To answer my research question and build a predictive model, I focused on the fo
 
 - `**OUTAGE.DURATION` (Minutes)**: My target variable, the total time from the start of the outage until power was fully restored.
 - `**CLIMATE.REGION`**: The geographical area where the outage occurred (e.g., Northeast, Central).
-- `**CAUSE.CATEGORY**`: The primary reason for the outage (e.g., Severe Weather, Equipment Failure).
-- `**ANOMALY.LEVEL**`: A quantitative measure of climate anomalies (like El Niño/La Niña) present during the outage.
+- `**CAUSE.CATEGORY`**: The primary reason for the outage (e.g., Severe Weather, Equipment Failure).
+- `**ANOMALY.LEVEL`**: A quantitative measure of climate anomalies (like El Niño/La Niña) present during the outage.
 - `**POPDEN_URBAN**`: The population density of urban areas in the affected state, which serves as a proxy for infrastructure complexity and repair priority.
 
 ## Data Cleaning and Exploratory Data Analysis
@@ -49,23 +49,15 @@ The table below shows a sample of the cleaned dataset used for modeling:
 | 20157     | East North Central | severe weather     | 1740            | 2279         |
 
 
-
-
-
 ### Univariate Analysis
 
 The univariate analysis focuses on understanding the marginal distribution of outage durations and other key variables before introducing more complex relationships.
-
-
-<iframe src="assets/my_plot_Distribution of Outage Durations.html" width="100%" height="450" frameborder="0"></iframe>
 
 > This histogram displays the distribution of outage durations, revealing a heavily right skewed pattern: most outages are resolved relatively quickly, but a small number of extreme events last for several days and exert a disproportionate influence on the mean.
 
 ### Bivariate Analysis and Interesting Aggregates
 
 For the bivariate analysis, I examined the relationship between geographical regions and the duration of outages to identify spatial patterns in grid resilience.
-
-<iframe src="assets/my_plot_Distribution of Outage Durations by Climate Region.html" width="100%" height="450" frameborder="0"></iframe>
 
 > By comparing climate region against outage duration, we can see how geographical context influences restoration speed. Regions such as the Northeast exhibit a higher frequency of long duration outages, likely linked to the intensity and type of local weather events.
 
@@ -86,4 +78,23 @@ To further explore how climate, cause, and population density interact, I constr
 
 
 > This pivot-style summary highlights how outage duration varies across regions and causes. Severe Weather consistently produces the longest recovery times across nearly all regions, whereas Intentional Attacks are typically resolved much faster, underscoring the role of environmental stress in driving prolonged grid failures.
+
+## Assessment of Missingness
+
+### MNAR Analysis
+
+In analyzing the data-generating process, I believe the column `**CAUSE.CATEGORY.DETAIL`** is likely **MNAR (Missing Not At Random)**. This column provides granular technical details about the specific cause of a power outage (e.g., "Insulator Failure" vs. "Tree Falling"). 
+
+The missingness is likely dependent on the specific details themselves, if an outage was caused by a complex or rare event that was difficult for the reporting utility to categorize quickly, it is more likely to be left blank. To move this toward **MAR**, I would need additional data from utility maintenance logs or technician "trouble tickets" to see if reporting thoroughness correlates with infrastructure age or the seniority of the technician on duty.
+
+### Missingness Dependency
+
+I conducted permutation tests to determine if the missingness of the `**CUSTOMERS.AFFECTED`** column (the number of people impacted) was dependent on other observed variables.
+
+- **Dependency on `CLIMATE.REGION` (MAR):** Using **Total Variation Distance (TVD)** as the test statistic, I performed a permutation test with 1,000 shuffles. I obtained an **Observed TVD of 0.2760** and a **P-value of 0.000**. Because the P-value is below our significance level of 0.05, we reject the null hypothesis. This indicates that the missingness of `CUSTOMERS.AFFECTED` is **MAR** and depends significantly on the geographical region.
+- **Dependency on `YEAR` (MAR):** Interestingly, a second permutation test against the `**YEAR`** column also resulted in an **Observed TVD of 0.3059** and a **P-value of 0.000**. This suggests that missingness is not consistent over time, reporting practices for customer impact likely evolved or shifted significantly during the 16 year period covered by the dataset.
+
+
+
+> **Interpretation:** The plot above displays the empirical distribution of the TVD statistic under the null hypothesis for the Climate Region test. My observed TVD (represented by the red dashed line) sits far in the tail of the distribution, resulting in a P-value of 0.000. This provides strong evidence that regional reporting practices—rather than random chance—drive the missingness in customer impact data.
 
