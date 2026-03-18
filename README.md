@@ -151,3 +151,28 @@ To ensure the model is practical and realistic, I am strictly using features tha
 Included Features: I will utilize CLIMATE.REGION, ANOMALY.LEVEL, and urbanization data like POPDEN_URBAN. These factors are known geographical or climatic constants at the onset of an event.
 
 Excluded Features (Data Leakage): I have excluded features such as CUSTOMERS.AFFECTED and DEMAND.LOSS.MW. These values are typically only finalized after the power has been fully restored, and using them to predict duration would result in "data leakage," leading to an unrealistically high (and practically useless) model performance.
+
+## Baseline Model
+
+### Model Description
+
+For my baseline model, I implemented a Linear Regression model using a scikit-learn Pipeline. This model serves as a starting point to determine how much of the variance in outage duration can be explained by basic geographic and climatic factors.
+
+### Features and Encodings
+
+I incorporated two initial features into this model:
+
+CLIMATE.REGION (Nominal): This feature was One-Hot Encoded to transform the categorical regional labels into a numerical format that the linear regression model can interpret.
+
+ANOMALY.LEVEL (Quantitative): This feature was passed through the pipeline without further transformation, as it is already a continuous numeric value representing oceanic climate anomalies.
+
+### Performance and Evaluation
+
+To evaluate the model's ability to generalize to unseen data, I performed an 80/20 train-test split. The resulting performance on the test set was:
+
+Baseline RMSE: ~7,739.85 minutes.
+
+Is this a "good" model?
+Currently, I would not consider this a "good" model. An RMSE of approximately 7,740 minutes represents a prediction error of roughly 5.3 days.
+
+Given that many power outages are resolved within hours, this level of error is too high for practical emergency management. The poor performance is likely due to the simplicity of the features and the linear model's sensitivity to extreme outliers (the right-skewed "extreme events" identified in Section 2). This baseline establishes a clear "floor" for performance that I will attempt to improve upon in the Final Model.
