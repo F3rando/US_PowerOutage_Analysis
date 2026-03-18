@@ -176,3 +176,37 @@ Is this a "good" model?
 Currently, I would not consider this a "good" model. An RMSE of approximately 7,740 minutes represents a prediction error of roughly 5.3 days.
 
 Given that many power outages are resolved within hours, this level of error is too high for practical emergency management. The poor performance is likely due to the simplicity of the features and the linear model's sensitivity to extreme outliers (the right-skewed "extreme events" identified in Section 2). This baseline establishes a clear "floor" for performance that I will attempt to improve upon in the Final Model.
+
+## Final Model
+
+### Model Description
+
+For my final model, I transitioned from a simple Linear Regression to a Random Forest Regressor. I chose this algorithm because power outage durations are non-linear and driven by complex "if-then" interactions (e.g., IF it is winter AND the cause is severe weather, THEN restoration is significantly delayed). Random Forests excel at capturing these high dimensional relationships through an variety of decision trees.
+
+### Engineered Features
+
+I added three key features to better reflect the data generating process:
+
+SEASON (Categorical): Captures seasonal recovery hurdles, such as snow and ice in winter versus high grid load in summer.
+
+CAUSE.CATEGORY (Nominal): Provides the "why" behind the event. A hurricane requires structural rebuilding, while an "Intentional Attack" often involves a localized mechanical fix.
+
+POPDEN_URBAN (Quantitative): Acts as a proxy for infrastructure density and repair priority.
+
+### Hyperparameter Tuning
+
+I used GridSearchCV with 3-fold cross-validation to optimize the following:
+
+n_estimators (Number of Trees): I selected 100 trees to ensure a stable, averaged prediction that minimizes noise.
+
+max_depth (Complexity): I tested depths of [None, 10, 20] to prevent the model from "overfitting", ensuring it learns generalizable patterns rather than memorizing individual historic outages.
+
+### Performance and Visual Analysis
+
+Baseline RMSE: ~7,739.85 minutes
+
+Final Model RMSE: ~5,646.65 minutes (27% Improvement)
+
+<iframe src="assets/final_model_residuals.html" width="100%" height="450" frameborder="0"></iframe>
+
+Residual Interpretation: My residual analysis shows that the model is highly effective at predicting "standard" outages, as seen by the high density of errors tightly clustered around the zero-line. While the model naturally struggles with extreme "Black Swan" events (the outliers above 20,000 minutes), the symmetric distribution in the marginal histogram confirms that the Random Forest has successfully captured the central tendencies of U.S. grid resilience without significant systematic bias.
