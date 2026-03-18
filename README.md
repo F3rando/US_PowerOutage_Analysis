@@ -18,11 +18,11 @@ The data utilized in this analysis contains 1,534 rows, each representing a majo
 
 To answer my research question and build a predictive model, I focused on the following key features:
 
-- **`OUTAGE.DURATION` (Minutes)**: My target variable, the total time from the start of the outage until power was fully restored.
-- **`CLIMATE.REGION`**: The geographical area where the outage occurred (e.g., Northeast, Central).
-- **`CAUSE.CATEGORY`**: The primary reason for the outage (e.g., Severe Weather, Equipment Failure).
-- **`ANOMALY.LEVEL`**: A quantitative measure of climate anomalies (like El Niño/La Niña) present during the outage.
-- **`POPDEN_URBAN`**: The population density of urban areas in the affected state, which serves as a proxy for infrastructure complexity and repair priority.
+- `**OUTAGE.DURATION` (Minutes)**: My target variable, the total time from the start of the outage until power was fully restored.
+- `**CLIMATE.REGION`**: The geographical area where the outage occurred (e.g., Northeast, Central).
+- `**CAUSE.CATEGORY**`: The primary reason for the outage (e.g., Severe Weather, Equipment Failure).
+- `**ANOMALY.LEVEL**`: A quantitative measure of climate anomalies (like El Niño/La Niña) present during the outage.
+- `**POPDEN_URBAN**`: The population density of urban areas in the affected state, which serves as a proxy for infrastructure complexity and repair priority.
 
 ## Data Cleaning and Exploratory Data Analysis
 
@@ -39,38 +39,45 @@ The table below shows a sample of the cleaned dataset used for modeling:
 
 > The cleaned sample illustrates how temporal, climatic, and demographic variables come together in a structured format suitable for exploratory analysis and prediction.
 
+
 | YEARMONTH | CLIMATE.REGION     | CAUSE.CATEGORY     | OUTAGE.DURATION | POPDEN_URBAN |
-|----------:|:-------------------|:-------------------|----------------:|-------------:|
-|    20117  | East North Central | severe weather     |            3060 |         2279 |
-|    20145  | East North Central | intentional attack |               1 |         2279 |
-|    201010 | East North Central | severe weather     |            3000 |         2279 |
-|    20126  | East North Central | severe weather     |            2550 |         2279 |
-|    20157  | East North Central | severe weather     |            1740 |         2279 |
+| --------- | ------------------ | ------------------ | --------------- | ------------ |
+| 20117     | East North Central | severe weather     | 3060            | 2279         |
+| 20145     | East North Central | intentional attack | 1               | 2279         |
+| 201010    | East North Central | severe weather     | 3000            | 2279         |
+| 20126     | East North Central | severe weather     | 2550            | 2279         |
+| 20157     | East North Central | severe weather     | 1740            | 2279         |
 
-<iframe src="assets/my_plot_Distribution of Outage Durations by Climate Region.html" width="100%" height="450" frameborder="0"></iframe>
 
-> This histogram displays the distribution of outage durations, revealing a heavily right-skewed pattern: most outages are resolved relatively quickly, but a small number of extreme events last for several days and exert a disproportionate influence on the mean.
+
+
+> By comparing climate region against outage duration, we can see how geographical context influences restoration speed. Regions such as the Northeast exhibit a higher frequency of long duration outages, likely linked to the intensity and type of local weather events.
 
 ### Univariate Analysis
 
 The univariate analysis focuses on understanding the marginal distribution of outage durations and other key variables before introducing more complex relationships.
 
-<iframe src="assets/my_plot_Distribution of Outage Durations.html" width="100%" height="450" frameborder="0"></iframe>
 
-> By comparing climate region against outage duration, we can see how geographical context influences restoration speed. Regions such as the Northeast exhibit a higher frequency of long-duration outages, likely linked to the intensity and type of local weather events.
+
+> This histogram displays the distribution of outage durations, revealing a heavily right skewed pattern: most outages are resolved relatively quickly, but a small number of extreme events last for several days and exert a disproportionate influence on the mean.
 
 ### Bivariate Analysis and Interesting Aggregates
 
 To further explore how climate, cause, and population density interact, I constructed aggregate tables summarizing average outage durations.
 
-| YEAR | MONTH | CLIMATE.REGION     | CAUSE.CATEGORY     | OUTAGE.DURATION | POPDEN_URBAN |
-|-----:|------:|:-------------------|:-------------------|----------------:|-------------:|
-| 2011 |     7 | East North Central | severe weather     |            3060 |         2279 |
-| 2014 |     5 | East North Central | intentional attack |               1 |         2279 |
-| 2010 |    10 | East North Central | severe weather     |            3000 |         2279 |
-| 2012 |     6 | East North Central | severe weather     |            2550 |         2279 |
-| 2015 |     7 | East North Central | severe weather     |            1740 |         2279 |
 
-<iframe src="assets/interesting_aggregates.html" width="100%" height="450" frameborder="0"></iframe>
+| CLIMATE.REGION     | equipment failure | fuel supply emergency | intentional attack | islanding | public appeal | severe weather | system operability disruption |
+| ------------------ | ----------------- | --------------------- | ------------------ | --------- | ------------- | -------------- | ----------------------------- |
+| Central            | 322               | 10035.2               | 346.06             | 125.33    | 1410          | 3250.01        | 2695.2                        |
+| East North Central | 26435.3           | 33971.2               | 2376.05            | 1         | 733           | 4434.82        | 2610                          |
+| Northeast          | 215.8             | 14629.6               | 195.98             | 881       | 2655          | 4429.9         | 773.5                         |
+| Northwest          | 702               | 1                     | 373.81             | 73.33     | 898           | 4838           | 141                           |
+| South              | 295.78            | 17482.5               | 325.61             | 493.5     | 1163.98       | 4391.35        | 866.07                        |
+| Southeast          | 554.5             | nan                   | 504.67             | nan       | 2865.4        | 2662.56        | 169.31                        |
+| Southwest          | 113.8             | 76                    | 265.67             | 2         | 2275          | 11572.9        | 329.22                        |
+| West               | 524.81            | 6154.6                | 857.68             | 214.86    | 2028.11       | 2928.37        | 363.67                        |
+| West North Central | 61                | nan                   | 23.5               | 68.2      | 439.5         | 2442.5         | nan                           |
+
 
 > This pivot-style summary highlights how outage duration varies across regions and causes. Severe Weather consistently produces the longest recovery times across nearly all regions, whereas Intentional Attacks are typically resolved much faster, underscoring the role of environmental stress in driving prolonged grid failures.
+
