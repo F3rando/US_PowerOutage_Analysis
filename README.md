@@ -126,4 +126,28 @@ After conducting a permutation test with 1,000 shuffles, I obtained the followin
 
 <iframe src="assets/hypothesis_test_plot.html" width="100%" height="450" frameborder="0"></iframe>
 
-Conclusion: Since the resulting P-value is far below our threshold of 0.05, we reject the null hypothesis. This suggests the observed difference in outage durations between the Northeast and West is unlikely to be explained by random chance alone. While this does not establish a causal link, it provides evidence that regional characteristics—such as infrastructure age, severe weather patterns, or population density—may contribute to differences in grid resilience.
+Conclusion: Since the resulting P-value is far below our threshold of 0.05, we reject the null hypothesis. This suggests the observed difference in outage durations between the Northeast and West is unlikely to be explained by random chance alone. While this does not establish a causal link, it provides evidence that regional characteristics, such as infrastructure age, severe weather patterns, or population density, may contribute to differences in grid resilience.
+
+## Framing a Prediction Problem
+
+### Problem Identification
+
+The goal of this analysis is to predict the duration of a major power outage (OUTAGE.DURATION).
+
+Prediction Type: Regression.
+
+Response Variable: OUTAGE.DURATION (minutes).
+
+Evaluation Metric: Root Mean Squared Error (RMSE).
+
+### Justification of Metric
+
+I chose RMSE as the primary evaluation metric because it penalizes larger errors more heavily than metrics like Mean Absolute Error (MAE). In the context of emergency response and urban planning, a massive under prediction of outage duration (e.g., predicting 2 hours when it actually lasts 2 days) is significantly more costly for emergency services and resource allocation than a series of small, consistent errors. RMSE ensures the model prioritizes minimizing these high impact "misses."
+
+### Time of Prediction
+
+To ensure the model is practical and realistic, I am strictly using features that would be available at the "time of prediction", the moment the outage is first reported.
+
+Included Features: I will utilize CLIMATE.REGION, ANOMALY.LEVEL, and urbanization data like POPDEN_URBAN. These factors are known geographical or climatic constants at the onset of an event.
+
+Excluded Features (Data Leakage): I have excluded features such as CUSTOMERS.AFFECTED and DEMAND.LOSS.MW. These values are typically only finalized after the power has been fully restored, and using them to predict duration would result in "data leakage," leading to an unrealistically high (and practically useless) model performance.
