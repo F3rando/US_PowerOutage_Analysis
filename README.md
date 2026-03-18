@@ -102,3 +102,28 @@ I conducted permutation tests to determine if the missingness of the `**CUSTOMER
 
 > **Interpretation:** The plot above displays the empirical distribution of the TVD statistic under the null hypothesis for the Climate Region test. My observed TVD (represented by the red dashed line) sits far in the tail of the distribution, resulting in a P-value of 0.000. This provides strong evidence that regional reporting practices—rather than random chance—drive the missingness in customer impact data.
 
+## Hypothesis Testing
+
+To further explore the factors influencing power outage recovery, I conducted a formal hypothesis test comparing the restoration times of two major regions: the Northeast and the West.
+
+### Hypothesis Setup
+
+- **Null Hypothesis (\(H_0\))**: The mean power outage duration in the Northeast region is equal to the mean power outage duration in the West region. Any observed difference is due to random chance.
+- **Alternative Hypothesis (\(H_1\))**: The mean power outage duration in the Northeast region differs from the mean power outage duration in the West region.
+- **Test Statistic**: Absolute difference in means.
+- **Significance Level (\(\alpha\))**: 0.05.
+
+### Justification
+
+I chose the Absolute Difference in Means as the test statistic because my research question aims to identify whether geography is associated with outage duration, regardless of which region is specifically "worse." This two-sided approach provides a robust assessment of regional disparity. A permutation test is appropriate here because it does not assume outage durations are normally distributed, which is important given the strong right-skew observed in the EDA.
+
+### Results and Conclusion
+
+After conducting a permutation test with 1,000 shuffles, I obtained the following results:
+
+- **Observed Absolute Difference**: 1,363.33 minutes.
+- **P-value**: < 0.001.
+
+<iframe src="assets/hypothesis_test_plot.html" width="100%" height="450" frameborder="0"></iframe>
+
+Conclusion: Since the resulting P-value is far below our threshold of 0.05, we reject the null hypothesis. This suggests the observed difference in outage durations between the Northeast and West is unlikely to be explained by random chance alone. While this does not establish a causal link, it provides evidence that regional characteristics—such as infrastructure age, severe weather patterns, or population density—may contribute to differences in grid resilience.
