@@ -210,3 +210,41 @@ Final Model RMSE: ~5,646.65 minutes (27% Improvement)
 <iframe src="assets/final_model_residuals.html" width="100%" height="450" frameborder="0"></iframe>
 
 Residual Interpretation: My residual analysis shows that the model is highly effective at predicting "standard" outages, as seen by the high density of errors tightly clustered around the zero-line. While the model naturally struggles with extreme "Black Swan" events (the outliers above 20,000 minutes), the symmetric distribution in the marginal histogram confirms that the Random Forest has successfully captured the central tendencies of U.S. grid resilience without significant systematic bias.
+
+## Fairness Analysis
+
+### Group Definitions
+
+To evaluate the fairness of my final model, I divided my test set into two groups based on the median population density:
+
+Group X (Urban): States with a population density above the median.
+
+Group Y (Rural): States with a population density at or below the median.
+
+### Hypothesis Setup
+
+Null Hypothesis (\(H_0\)): The model is fair. Its RMSE for urban and rural states is roughly the same, and any observed differences are due to random chance.
+
+Alternative Hypothesis (\(H_1\)): The model is unfair. Its RMSE for rural states is significantly different from its RMSE for urban states.
+
+Evaluation Metric: Root Mean Squared Error (RMSE).
+
+Test Statistic: Absolute difference in RMSE.
+
+Significance Level (\(\alpha\)): 0.05.
+
+### Results and Conclusion
+
+After performing a permutation test with 1,000 shuffles, I obtained the following results:
+
+RMSE for High Density (Urban): 4,764.96
+
+RMSE for Low Density (Rural): 8,907.19
+
+Observed Difference: 4,142.24
+
+P-value: 0.9270
+
+<iframe src="assets/fairness_analysis_plot.html" width="100%" height="450" frameborder="0"></iframe>
+
+Conclusion: I fail to reject the null hypothesis. With a P-value of 0.9270, which is well above our significance threshold of 0.05, there is no statistically significant evidence to suggest that the model's performance varies unfairly between urban and rural areas. While the raw RMSE was higher in rural states, the permutation test indicates that this difference is likely driven by the presence of a few extreme, high-duration outliers in the rural subset rather than a systemic bias in the model's predictive ability.
